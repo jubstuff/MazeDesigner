@@ -210,7 +210,7 @@ public class Login extends javax.swing.JDialog {
        Database.user = tUser.getText();
        Database.password = new String(tPassword.getPassword());
        try {
-          Database.setDefaultConnection(Database.nuovaConnessione());
+          Database.setDefaultConnection(Database.getDefaultConnection());
           //new Main().setVisible(true);
           bottonePremuto = PREMUTO_LOGIN;
           dispose();

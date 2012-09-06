@@ -162,6 +162,7 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
         tabFrameTable.getSelectionModel().setSelectionMode(
                 ListSelectionModel.SINGLE_SELECTION);
         tabFrameTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 //       selezioneTabellaCambiata();
             }
@@ -576,7 +577,6 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
         }
     }
     private void bUltimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bUltimoActionPerformed
-// TODO add your handling code here:
         try {
             rs.last();
         } catch (SQLException e) {
@@ -586,7 +586,6 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
     }//GEN-LAST:event_bUltimoActionPerformed
 
     private void bSuccessivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSuccessivoActionPerformed
-// TODO add your handling code here:
         try {
             if (!rs.isLast()) {
                 rs.next();
@@ -598,7 +597,6 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
     }//GEN-LAST:event_bSuccessivoActionPerformed
 
     private void bPrecedenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bPrecedenteActionPerformed
-// TODO add your handling code here:
         try {
             if (!rs.isFirst()) {
                 rs.previous();
@@ -711,7 +709,7 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
                 System.out.println("il codice non risulta vuoto");
             }
             try {
-                c = Database.nuovaConnessione();
+                c = Database.getDefaultConnection();
                 if (modalita == APPEND_QUERY) {
                     st = getComandoInserimento(c);
                 } else {
@@ -773,11 +771,10 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
 
     private boolean eseguiComando(String cmd, Connection c) {
         Statement s;
-        String query;
         Connection mycon = null;
         try {
             if (c == null) {
-                mycon = Database.nuovaConnessione();
+                mycon = Database.getDefaultConnection();
             } else {
                 mycon = c;
             }
