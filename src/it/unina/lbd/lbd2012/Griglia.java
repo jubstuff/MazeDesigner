@@ -90,6 +90,9 @@ public class Griglia extends JPanel {
         btn.setIsUscita(true);
     }
     private void specialeButtonAction(CasellaButton btn) {
+        disableEntrataOrUscita(btn);
+        
+        
         btn.setBackground(Color.YELLOW);
         btn.setTipo(SPECIALE);
         String result;
@@ -115,13 +118,14 @@ public class Griglia extends JPanel {
 
     private void casellaButtonAction(CasellaButton btn) {
         System.out.println("Creata casella vuota");
+        disableEntrataOrUscita(btn);
         btn.setBackground(Color.WHITE);
         btn.setTipo(CASELLA);
     }
 
     private void muroButtonAction(CasellaButton btn) {
         System.out.println("Creata casella muro");
-
+        disableEntrataOrUscita(btn);
         btn.setBackground(Color.BLACK);
         btn.setTipo(MURO);
     }
@@ -153,32 +157,32 @@ public class Griglia extends JPanel {
 
             private void gridButtonAction(ActionEvent event) {
                 CasellaButton source = (CasellaButton) event.getSource();
-                int row = source.getPosX();
-                int col = source.getPosY();
+                int posX = source.getPosX();
+                int posY = source.getPosY();
                 String tipo = source.getTipo();
-                System.out.println("Cliccato bottone griglia: [" + col + "," + row + "]");
+                System.out.println("Cliccato bottone griglia: [" + posX + "," + posY + "]");
                 if (modalita.equals(CASELLA)) {
                     if (!(tipo.equals(CASELLA))) {
-                        casellaButtonAction(grid[row][col]);
+                        casellaButtonAction(grid[posX][posY]);
                     }
                 } else if (modalita.equals(MURO)) {
                     if (!(tipo.equals(MURO))) {
-                        muroButtonAction(grid[row][col]);
+                        muroButtonAction(grid[posX][posY]);
                     }
                 } else if (modalita.equals(ENTRATA)) {
                     if (entrata != null) {
                         entrata.setIsEntrata(false);
                         casellaButtonAction(entrata);
                     }
-                    entrataButtonAction(grid[row][col]);
+                    entrataButtonAction(grid[posX][posY]);
                 } else if (modalita.equals(USCITA)) {
                     if (uscita != null) {
                         uscita.setIsUscita(false);
                         casellaButtonAction(uscita);
                     }
-                    uscitaButtonAction(grid[row][col]);
+                    uscitaButtonAction(grid[posX][posY]);
                 } else if (modalita.equals(SPECIALE)) {
-                    specialeButtonAction(grid[row][col]);
+                    specialeButtonAction(grid[posX][posY]);
                 }
             }
         }
@@ -289,6 +293,7 @@ public class Griglia extends JPanel {
                 posY = rs.getInt("PosY");
                 tipo = rs.getString("Tipo");
                 codice = rs.getInt("codice");
+                System.out.println("Carico casella [" + posX + ":" + posY + "]");
 
                 grid[posX][posY] = new CasellaButton("");
                 grid[posX][posY].setPreferredSize(new Dimension(20, 20));
@@ -419,22 +424,22 @@ public class Griglia extends JPanel {
 
                             String intoQuery = "INTO Collegamento(origine,destinazione) ";
 
-                            if (i > 0 && !((String) grid[i - 1][j].getTipo()).equals(MURO)) {
+                            if ((i > 0) && !((String) grid[i - 1][j].getTipo()).equals(MURO)) {
                                 System.out.println("Collego " + grid[i][j].getCodice() + "->" + grid[i - 1][j].getCodice());
-                                collQuery += intoQuery + "VALUES(" + grid[i][j].getCodice() + "," + grid[i - 1][j].getCodice() + ")";
+                                collQuery += intoQuery + "VALUES(" + grid[i][j].getCodice() + "," + grid[i - 1][j].getCodice() + ") ";
                             }
-                            if (i < grid.length - 1 && !((String) grid[i + 1][j].getTipo()).equals(MURO)) {
+                            if ((i < grid.length - 1) && !((String) grid[i + 1][j].getTipo()).equals(MURO)) {
                                 System.out.println("Collego " + grid[i][j].getCodice() + "->" + grid[i + 1][j].getCodice());
-                                collQuery += intoQuery + "VALUES(" + grid[i][j].getCodice() + "," + grid[i + 1][j].getCodice() + ")";
+                                collQuery += intoQuery + "VALUES(" + grid[i][j].getCodice() + "," + grid[i + 1][j].getCodice() + ") ";
 
                             }
-                            if (j > 0 && !((String) grid[i][j - 1].getTipo()).equals(MURO)) {
+                            if ((j > 0) && !((String) grid[i][j - 1].getTipo()).equals(MURO)) {
                                 System.out.println("Collego " + grid[i][j].getCodice() + "->" + grid[i][j - 1].getCodice());
-                                collQuery += intoQuery + "VALUES(" + grid[i][j].getCodice() + "," + grid[i][j - 1].getCodice() + ")";
+                                collQuery += intoQuery + "VALUES(" + grid[i][j].getCodice() + "," + grid[i][j - 1].getCodice() + ") ";
                             }
-                            if (j < grid[0].length - 1 && !((String) grid[i][j + 1].getTipo()).equals(MURO)) {
+                            if ((j < grid[0].length - 1) && !((String) grid[i][j + 1].getTipo()).equals(MURO)) {
                                 System.out.println("Collego " + grid[i][j].getCodice() + "->" + grid[i][j + 1].getCodice());
-                                collQuery += intoQuery + "VALUES(" + grid[i][j].getCodice() + "," + grid[i][j + 1].getCodice() + ")";
+                                collQuery += intoQuery + "VALUES(" + grid[i][j].getCodice() + "," + grid[i][j + 1].getCodice() + ") ";
                             }
                         }
                         
@@ -478,6 +483,15 @@ public class Griglia extends JPanel {
 
         } else {
             throw new Exception("Bisogna scegliere entrata e uscita");
+        }
+    }
+
+    private void disableEntrataOrUscita(CasellaButton btn) {
+        if(btn.isEntrata()) {
+            entrata = null;
+        }
+        if(btn.isUscita()) {
+            uscita = null;
         }
     }
 }
