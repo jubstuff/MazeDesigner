@@ -1,4 +1,3 @@
-
 package it.unina.lbd.lbd2012;
 
 import javax.swing.JButton;

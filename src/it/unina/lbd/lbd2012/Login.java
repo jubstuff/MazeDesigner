@@ -91,27 +91,9 @@ public class Login extends javax.swing.JDialog {
 
         jLabel7.setText("Schema");
 
-        tSchema.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tSchemaActionPerformed(evt);
-            }
-        });
-
-        tHost.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tHostActionPerformed(evt);
-            }
-        });
-
         jLabel4.setText("Utente");
 
         jLabel5.setText("Password");
-
-        tUser.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tUserActionPerformed(evt);
-            }
-        });
 
         tPassword.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         tPassword.setPreferredSize(new java.awt.Dimension(30, 20));
@@ -219,18 +201,6 @@ public class Login extends javax.swing.JDialog {
                   + " errate?)", "Errore", JOptionPane.ERROR_MESSAGE);
        }
     }//GEN-LAST:event_bLoginActionPerformed
-
-    private void tSchemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tSchemaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tSchemaActionPerformed
-
-    private void tUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tUserActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tUserActionPerformed
-
-    private void tHostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tHostActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tHostActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bAnnulla;

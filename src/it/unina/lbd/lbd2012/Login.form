@@ -151,14 +151,8 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tSchema">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tSchemaActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="tHost">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tHostActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="tServizio">
     </Component>
@@ -175,9 +169,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tUser">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tUserActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JPasswordField" name="tPassword">
       <Properties>

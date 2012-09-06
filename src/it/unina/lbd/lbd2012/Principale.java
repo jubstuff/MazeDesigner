@@ -42,10 +42,8 @@ public class Principale extends javax.swing.JFrame {
         miLogin = new javax.swing.JMenuItem();
         miEsci = new javax.swing.JMenuItem();
         menFunzioni = new javax.swing.JMenu();
-        miMarca = new javax.swing.JMenuItem();
-        miModello = new javax.swing.JMenuItem();
-        miAllestimento = new javax.swing.JMenuItem();
-        miCaratteristica = new javax.swing.JMenuItem();
+        miNuovoLabirinto = new javax.swing.JMenuItem();
+        miCercaLabirinto = new javax.swing.JMenuItem();
         menAiuto = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -90,37 +88,21 @@ public class Principale extends javax.swing.JFrame {
 
         menFunzioni.setText("Funzioni");
 
-        miMarca.setText("Marca");
-        miMarca.addActionListener(new java.awt.event.ActionListener() {
+        miNuovoLabirinto.setText("Nuovo labirinto");
+        miNuovoLabirinto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miMarcaActionPerformed(evt);
+                miNuovoLabirintoActionPerformed(evt);
             }
         });
-        menFunzioni.add(miMarca);
+        menFunzioni.add(miNuovoLabirinto);
 
-        miModello.setText("Modello");
-        miModello.addActionListener(new java.awt.event.ActionListener() {
+        miCercaLabirinto.setText("Cerca Labirinto");
+        miCercaLabirinto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miModelloActionPerformed(evt);
+                miCercaLabirintoActionPerformed(evt);
             }
         });
-        menFunzioni.add(miModello);
-
-        miAllestimento.setText("Allestimento");
-        miAllestimento.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miAllestimentoActionPerformed(evt);
-            }
-        });
-        menFunzioni.add(miAllestimento);
-
-        miCaratteristica.setText("Caratteristica");
-        miCaratteristica.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miCaratteristicaActionPerformed(evt);
-            }
-        });
-        menFunzioni.add(miCaratteristica);
+        menFunzioni.add(miCercaLabirinto);
 
         jMenuBar.add(menFunzioni);
 
@@ -159,15 +141,9 @@ public class Principale extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void miCaratteristicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCaratteristicaActionPerformed
-    }//GEN-LAST:event_miCaratteristicaActionPerformed
-
     private void miEsciActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miEsciActionPerformed
         dispose();
     }//GEN-LAST:event_miEsciActionPerformed
-
-    private void miAllestimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAllestimentoActionPerformed
-    }//GEN-LAST:event_miAllestimentoActionPerformed
 
     private void miLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miLoginActionPerformed
         Login l;
@@ -178,11 +154,13 @@ public class Principale extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_miLoginActionPerformed
 
-    private void miModelloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miModelloActionPerformed
-    }//GEN-LAST:event_miModelloActionPerformed
+    private void miCercaLabirintoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miCercaLabirintoActionPerformed
+        bCercaLabirintoActionPerformed(evt);
+    }//GEN-LAST:event_miCercaLabirintoActionPerformed
 
-    private void miMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miMarcaActionPerformed
-    }//GEN-LAST:event_miMarcaActionPerformed
+    private void miNuovoLabirintoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNuovoLabirintoActionPerformed
+        bNuovoLabirintoActionPerformed(evt);
+    }//GEN-LAST:event_miNuovoLabirintoActionPerformed
 
     private void bNuovoLabirintoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bNuovoLabirintoActionPerformed
         int modalita_nuovo = 1;
@@ -223,11 +201,9 @@ public class Principale extends javax.swing.JFrame {
     private javax.swing.JMenu menAiuto;
     private javax.swing.JMenu menFile;
     private javax.swing.JMenu menFunzioni;
-    private javax.swing.JMenuItem miAllestimento;
-    private javax.swing.JMenuItem miCaratteristica;
+    private javax.swing.JMenuItem miCercaLabirinto;
     private javax.swing.JMenuItem miEsci;
     private javax.swing.JMenuItem miLogin;
-    private javax.swing.JMenuItem miMarca;
-    private javax.swing.JMenuItem miModello;
+    private javax.swing.JMenuItem miNuovoLabirinto;
     // End of variables declaration//GEN-END:variables
 }

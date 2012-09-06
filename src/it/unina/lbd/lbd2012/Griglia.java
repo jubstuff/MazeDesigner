@@ -395,7 +395,6 @@ public class Griglia extends JPanel {
             try {
 
                 conn.setAutoCommit(false);
-                //TODO utilizzare il codice in questa query
                 String updateQuery = "UPDATE Casella SET Tipo = ? WHERE codice = ?";
                 PreparedStatement updStmt = conn.prepareStatement(updateQuery,
                         ResultSet.TYPE_SCROLL_INSENSITIVE,

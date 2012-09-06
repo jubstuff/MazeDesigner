@@ -32,36 +32,20 @@
             <Property name="text" type="java.lang.String" value="Funzioni"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="miMarca">
+            <MenuItem class="javax.swing.JMenuItem" name="miNuovoLabirinto">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Marca"/>
+                <Property name="text" type="java.lang.String" value="Nuovo labirinto"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miMarcaActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miNuovoLabirintoActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="miModello">
+            <MenuItem class="javax.swing.JMenuItem" name="miCercaLabirinto">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Modello"/>
+                <Property name="text" type="java.lang.String" value="Cerca Labirinto"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miModelloActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="miAllestimento">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Allestimento"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miAllestimentoActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="miCaratteristica">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Caratteristica"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miCaratteristicaActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="miCercaLabirintoActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
