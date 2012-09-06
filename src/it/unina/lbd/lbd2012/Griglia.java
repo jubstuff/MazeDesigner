@@ -58,20 +58,20 @@ public class Griglia extends JPanel {
     private CasellaButton uscita;
     boolean isBozza;
 
-    public Griglia(int width, int height, int codiceLabirinto) {
+    public Griglia(int colonne, int righe, int codiceLabirinto) {
         this.codiceLabirinto = codiceLabirinto;
         isBozza = isBozza();
-        createPanel(width, height);
+        createPanel(colonne, righe);
     }
 
     /**
      * Crea il pannello contenente la griglia del labirinto e i controlli
      *
-     * @param width
-     * @param height
+     * @param colonne
+     * @param righe
      */
-    private void createPanel(int width, int height) {
-        JPanel gridPanel = createGrid(width, height);
+    private void createPanel(int colonne, int righe) {
+        JPanel gridPanel = createGrid(colonne, righe);
         JPanel controlPanel = createControlRadioButtons();
 
         panel = new JPanel();
@@ -89,10 +89,11 @@ public class Griglia extends JPanel {
         btn.setTipo(CASELLA);
         btn.setIsUscita(true);
     }
+
     private void specialeButtonAction(CasellaButton btn) {
         disableEntrataOrUscita(btn);
-        
-        
+
+
         btn.setBackground(Color.YELLOW);
         btn.setTipo(SPECIALE);
         String result;
@@ -100,17 +101,17 @@ public class Griglia extends JPanel {
         int punti = 0;
         try {
             result = JOptionPane.showInputDialog(messaggio);
-            if(result != null) {
+            if (result != null) {
                 punti = Integer.decode(result);
             } else {
                 casellaButtonAction(btn);
             }
-            
+
         } catch (NumberFormatException e) {
             String message = "Il bonus/malus deve essere un numero intero"
                     + "\n Bonus/malus impostato a 0.";
             JOptionPane.showMessageDialog(this, message, "Errore!",
-                        JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.ERROR_MESSAGE);
             punti = 0;
         }
         btn.setPunteggio(punti);
@@ -140,13 +141,13 @@ public class Griglia extends JPanel {
     /**
      * Crea il pannello contenente la griglia del labirinto
      *
-     * @param width
-     * @param height
+     * @param colonne
+     * @param righe
      * @return
      */
-    private JPanel createGrid(int width, int height) {
+    private JPanel createGrid(int colonne, int righe) {
         JPanel gpanel = new JPanel();
-        gpanel.setLayout(new GridLayout(height, width));
+        gpanel.setLayout(new GridLayout(righe, colonne));
 
         class GridButtonListener implements ActionListener {
 
@@ -157,32 +158,32 @@ public class Griglia extends JPanel {
 
             private void gridButtonAction(ActionEvent event) {
                 CasellaButton source = (CasellaButton) event.getSource();
-                int posX = source.getPosX();
-                int posY = source.getPosY();
+                int col = source.getCol();
+                int row = source.getRow();
                 String tipo = source.getTipo();
-                System.out.println("Cliccato bottone griglia: [" + posX + "," + posY + "]");
+                System.out.println("Cliccato bottone griglia: [" + row + "," + col + "]");
                 if (modalita.equals(CASELLA)) {
                     if (!(tipo.equals(CASELLA))) {
-                        casellaButtonAction(grid[posX][posY]);
+                        casellaButtonAction(grid[row][col]);
                     }
                 } else if (modalita.equals(MURO)) {
                     if (!(tipo.equals(MURO))) {
-                        muroButtonAction(grid[posX][posY]);
+                        muroButtonAction(grid[row][col]);
                     }
                 } else if (modalita.equals(ENTRATA)) {
                     if (entrata != null) {
                         entrata.setIsEntrata(false);
                         casellaButtonAction(entrata);
                     }
-                    entrataButtonAction(grid[posX][posY]);
+                    entrataButtonAction(grid[row][col]);
                 } else if (modalita.equals(USCITA)) {
                     if (uscita != null) {
                         uscita.setIsUscita(false);
                         casellaButtonAction(uscita);
                     }
-                    uscitaButtonAction(grid[posX][posY]);
+                    uscitaButtonAction(grid[row][col]);
                 } else if (modalita.equals(SPECIALE)) {
-                    specialeButtonAction(grid[posX][posY]);
+                    specialeButtonAction(grid[row][col]);
                 }
             }
         }
@@ -190,11 +191,9 @@ public class Griglia extends JPanel {
 
 
         ActionListener listener = new GridButtonListener();
-        buildGrid(width, height, listener, gpanel);
+        buildGrid(colonne, righe, listener, gpanel);
         return gpanel;
     }
-
-    
 
     private JPanel createControlRadioButtons() {
         //creazione bottoni modalita'
@@ -252,7 +251,7 @@ public class Griglia extends JPanel {
         return cpanel;
     }
 
-    private void buildGrid(int width, int height, ActionListener listener, JPanel gpanel) {
+    private void buildGrid(int colonne, int righe, ActionListener listener, JPanel gpanel) {
         ResultSet rs;
         int posX;
         int posY;
@@ -279,13 +278,13 @@ public class Griglia extends JPanel {
             }
 
             String query = "SELECT codice, PosX, PosY, Tipo FROM Casella where labirinto = ? "
-                    + "ORDER BY PosX ASC, PosY ASC";
+                    + "ORDER BY PosY ASC, PosX ASC";
             PreparedStatement st = con.prepareStatement(query,
                     ResultSet.TYPE_SCROLL_INSENSITIVE,
                     ResultSet.CONCUR_READ_ONLY);
             st.setInt(1, codiceLabirinto);
             rs = st.executeQuery();
-            grid = new CasellaButton[width][height];
+            grid = new CasellaButton[righe][colonne];
 
             while (rs.next()) {
 
@@ -295,23 +294,25 @@ public class Griglia extends JPanel {
                 codice = rs.getInt("codice");
                 System.out.println("Carico casella [" + posX + ":" + posY + "]");
 
-                grid[posX][posY] = new CasellaButton("");
-                grid[posX][posY].setPreferredSize(new Dimension(20, 20));
-                grid[posX][posY].setPosX(posX);
-                grid[posX][posY].setPosY(posY);
-                grid[posX][posY].setCodice(codice);
-                setTipoCasella(grid[posX][posY], tipo);
+                grid[posY][posX] = new CasellaButton("");
+                grid[posY][posX].setPreferredSize(new Dimension(20, 20));
+                grid[posY][posX].setCol(posX);
+                grid[posY][posX].setRow(posY);
+                grid[posY][posX].setCodice(codice);
+                setTipoCasella(grid[posY][posX], tipo);
                 if (codice == codiceEntrata) {
-                    entrataButtonAction(grid[posX][posY]);
+                    entrataButtonAction(grid[posY][posX]);
                 }
                 if (codice == codiceUscita) {
-                    uscitaButtonAction(grid[posX][posY]);
+                    uscitaButtonAction(grid[posY][posX]);
                 }
-                grid[posX][posY].addActionListener(listener);
-                grid[posX][posY].addMouseListener(new java.awt.event.MouseAdapter() {
+                grid[posY][posX].addActionListener(listener);
+                
+                //Right click mouse listener per descrizione
+                grid[posY][posX].addMouseListener(new java.awt.event.MouseAdapter() {
                     @Override
                     public void mousePressed(java.awt.event.MouseEvent evt) {
-                        if( SwingUtilities.isRightMouseButton(evt)) {
+                        if (SwingUtilities.isRightMouseButton(evt)) {
                             rightClickAction(evt);
                         }
                     }
@@ -322,7 +323,7 @@ public class Griglia extends JPanel {
                         if (descr != null && descr.length() > 0) {
                             try {
                                 Connection conn = Database.getDefaultConnection();
-                                System.out.println("[" + source.getPosX() + ":" + source.getPosY() + "]: " + descr);
+                                System.out.println("[" + source.getCol() + ":" + source.getRow() + "]: " + descr);
                                 String updateQuery = "UPDATE Casella SET descrizione = ? WHERE codice = ?";
                                 PreparedStatement stmt = conn.prepareStatement(updateQuery,
                                         ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -336,15 +337,15 @@ public class Griglia extends JPanel {
                     }
                 });
 
-                gpanel.add(grid[posX][posY]);
-                System.out.println(posX + ":" + posY + ":" + tipo);
+                gpanel.add(grid[posY][posX]);
+                System.out.println("Riga:"+posY + "; Colonna:" + posX + ":" + tipo);
             }
 
         } catch (SQLException e) {
             //TODO che fare qui?
         }
     }
-    
+
     private void setTipoCasella(CasellaButton btn, String tipo) {
         btn.setTipo(tipo);
         if (tipo.equals(CASELLA)) {
@@ -366,7 +367,7 @@ public class Griglia extends JPanel {
                 ResultSet.CONCUR_READ_ONLY);
         delCollStmt.setInt(1, codiceLabirinto);
         delCollStmt.execute();
-        
+
         String deleteSpecQuery = "DELETE FROM speciale WHERE id_speciale IN (SELECT codice FROM casella WHERE labirinto=?)";
         PreparedStatement delSpecStmt = conn.prepareStatement(deleteSpecQuery,
                 ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -395,25 +396,25 @@ public class Griglia extends JPanel {
 
                 conn.setAutoCommit(false);
                 //TODO utilizzare il codice in questa query
-                String updateQuery = "UPDATE Casella SET Tipo = ? WHERE Labirinto = ? "
-                        + "AND PosX = ? AND PosY = ?";
+                String updateQuery = "UPDATE Casella SET Tipo = ? WHERE codice = ?";
                 PreparedStatement updStmt = conn.prepareStatement(updateQuery,
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
                         ResultSet.CONCUR_READ_ONLY);
-                
+
                 String specialeQuery = "INSERT INTO SPECIALE(id_speciale, modificatorePunteggio) VALUES(?,?)";
                 PreparedStatement specStmt = conn.prepareStatement(specialeQuery,
                         ResultSet.TYPE_SCROLL_INSENSITIVE,
                         ResultSet.CONCUR_READ_ONLY);
-                
-                updStmt.setInt(2, codiceLabirinto);
+
                 String collQuery = "INSERT ALL ";
+                
                 for (int i = 0; i < grid.length; i++) {
                     for (int j = 0; j < grid[0].length; j++) {
+                        //i scorre in altezza - righe
+                        //j scorre in larghezza - colonne
                         String tipo = grid[i][j].getTipo();
                         updStmt.setString(1, tipo);
-                        updStmt.setInt(3, i);
-                        updStmt.setInt(4, j);
+                        updStmt.setInt(2, grid[i][j].getCodice());
                         updStmt.executeUpdate();
 
                         /*
@@ -425,25 +426,24 @@ public class Griglia extends JPanel {
                             String intoQuery = "INTO Collegamento(origine,destinazione) ";
 
                             if ((i > 0) && !((String) grid[i - 1][j].getTipo()).equals(MURO)) {
-                                System.out.println("Collego " + grid[i][j].getCodice() + "->" + grid[i - 1][j].getCodice());
+                                System.out.println("Collego " + grid[i][j].getCol() + ":" + grid[i][j].getRow() + "->" + grid[i - 1][j].getCol() + ":" + grid[i - 1][j].getRow());
                                 collQuery += intoQuery + "VALUES(" + grid[i][j].getCodice() + "," + grid[i - 1][j].getCodice() + ") ";
                             }
                             if ((i < grid.length - 1) && !((String) grid[i + 1][j].getTipo()).equals(MURO)) {
-                                System.out.println("Collego " + grid[i][j].getCodice() + "->" + grid[i + 1][j].getCodice());
+                                System.out.println("Collego " + grid[i][j].getCol() + ":" + grid[i][j].getRow() + "->" + grid[i + 1][j].getCol() + ":" + grid[i + 1][j].getRow());
                                 collQuery += intoQuery + "VALUES(" + grid[i][j].getCodice() + "," + grid[i + 1][j].getCodice() + ") ";
-
                             }
                             if ((j > 0) && !((String) grid[i][j - 1].getTipo()).equals(MURO)) {
-                                System.out.println("Collego " + grid[i][j].getCodice() + "->" + grid[i][j - 1].getCodice());
+                                System.out.println("Collego " + grid[i][j].getCol() + ":" + grid[i][j].getRow() + "->" + grid[i][j-1].getCol() + ":" + grid[i][j-1].getRow());
                                 collQuery += intoQuery + "VALUES(" + grid[i][j].getCodice() + "," + grid[i][j - 1].getCodice() + ") ";
                             }
                             if ((j < grid[0].length - 1) && !((String) grid[i][j + 1].getTipo()).equals(MURO)) {
-                                System.out.println("Collego " + grid[i][j].getCodice() + "->" + grid[i][j + 1].getCodice());
+                                System.out.println("Collego " + grid[i][j].getCol() + ":" + grid[i][j].getRow() + "->" + grid[i][j+1].getCol() + ":" + grid[i][j+1].getRow());
                                 collQuery += intoQuery + "VALUES(" + grid[i][j].getCodice() + "," + grid[i][j + 1].getCodice() + ") ";
                             }
                         }
-                        
-                        if(tipo.equals(SPECIALE)) {
+
+                        if (tipo.equals(SPECIALE)) {
                             specStmt.setInt(1, grid[i][j].getCodice());
                             specStmt.setInt(2, grid[i][j].getPunteggio());
                             specStmt.execute();
@@ -487,10 +487,10 @@ public class Griglia extends JPanel {
     }
 
     private void disableEntrataOrUscita(CasellaButton btn) {
-        if(btn.isEntrata()) {
+        if (btn.isEntrata()) {
             entrata = null;
         }
-        if(btn.isUscita()) {
+        if (btn.isUscita()) {
             uscita = null;
         }
     }

@@ -17,8 +17,8 @@ public class GrigliaFrame extends javax.swing.JFrame {
     private ResultSet rs;
     Griglia gridPanel;
     private int codiceLabirinto = -1;
-    private int altezza = 0;
-    private int larghezza = 0;
+    private int righe = 0;
+    private int colonne = 0;
     final static public int MAZE_NOT_FOUND = 0;
 
     /**
@@ -170,16 +170,16 @@ public class GrigliaFrame extends javax.swing.JFrame {
                 rs = st.executeQuery();
 
                 while (rs.next()) {
-                    larghezza = rs.getInt("DimX");
-                    altezza = rs.getInt("DimY");
-                    System.out.println("[" + larghezza + ":" + altezza + "]");
+                    colonne = rs.getInt("DimX");
+                    righe = rs.getInt("DimY");
+                    System.out.println("[" + colonne + ":" + righe + "]");
                 }
 
             } catch (SQLException e) {
             }
 
             //Crea griglia labirinto
-            gridPanel = new Griglia(larghezza, altezza, codiceLabirinto);
+            gridPanel = new Griglia(colonne, righe, codiceLabirinto);
             //rimuovi il labirinto (eventualmente) caricato prima
             gridContainer.removeAll();
             gridContainer.add(gridPanel);

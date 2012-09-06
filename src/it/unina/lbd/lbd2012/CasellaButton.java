@@ -8,8 +8,8 @@ import javax.swing.JButton;
  * @author justb
  */
 public class CasellaButton extends JButton {
-    private int posX;
-    private int posY;
+    private int col;
+    private int row;
     private int codice;
     private boolean isEntrata;
     private boolean isUscita;
@@ -23,29 +23,29 @@ public class CasellaButton extends JButton {
     /**
      * @return the posX
      */
-    public int getPosX() {
-        return posX;
+    public int getCol() {
+        return col;
     }
 
     /**
-     * @param posX the posX to set
+     * @param col the posX to set
      */
-    public void setPosX(int posX) {
-        this.posX = posX;
+    public void setCol(int col) {
+        this.col = col;
     }
 
     /**
      * @return the posY
      */
-    public int getPosY() {
-        return posY;
+    public int getRow() {
+        return row;
     }
 
     /**
-     * @param posY the posY to set
+     * @param row the posY to set
      */
-    public void setPosY(int posY) {
-        this.posY = posY;
+    public void setRow(int row) {
+        this.row = row;
     }
 
     /**

@@ -283,12 +283,12 @@ Create or replace trigger inizializza_labirinto
 After insert on labirinto
 for each row
 begin
-	for i in 0 .. :new.dimx - 1
+	for i in 0 .. :new.dimy - 1
 	loop
-		for j in 0 .. :new.dimy - 1
-    loop
-      insert into Casella (labirinto,posx,posy) Values (:new.codice,i,j);
-		end loop;
+            for j in 0 .. :new.dimx - 1
+            loop
+                insert into Casella (labirinto,posy,posx) Values (:new.codice,i,j);
+            end loop;
 	end loop;
 end;
 
@@ -384,11 +384,11 @@ unique(origine,destinazione)
 CREATE OR REPLACE PROCEDURE init_caselle_labirinto (cod_lab in number, dimx_lab in number, dimy_lab in number)
 AS
 BEGIN
-    FOR i IN 0 .. dimx_lab - 1
+    FOR i IN 0 .. dimy_lab - 1
     LOOP
-        FOR j IN 0 .. dimy_lab - 1 
+        FOR j IN 0 .. dimx_lab - 1 
         LOOP
-        INSERT INTO casella (labirinto,posx,posy) VALUES ( cod_lab, i, j);
+        INSERT INTO casella (labirinto,posy,posx) VALUES ( cod_lab, i, j);
         END LOOP;
     END LOOP;
 END;
@@ -404,5 +404,3 @@ BEGIN
     init_caselle_labirinto(cod_lab, dimx_lab, dimy_lab);
 END;
 /
-
-
