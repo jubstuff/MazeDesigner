@@ -199,6 +199,8 @@ public class Labirinto extends DBFrame {
             g.setVisible(true);
         } finally {
             setCursor(Cursor.getDefaultCursor());
+            pulisci();
+            eseguiQuery();
 
         }
     }//GEN-LAST:event_bEditLabirintoActionPerformed
