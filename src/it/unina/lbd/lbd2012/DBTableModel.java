@@ -63,16 +63,14 @@ public class DBTableModel extends AbstractTableModel {
       }
       try {
          int currentPosition, last;
-         currentPosition = rs.getRow();
+         currentPosition = rs.getRow() <= 0 ? rs.getRow() : 1;
          rs.last();
          last = rs.getRow();
          rs.absolute(currentPosition);
          return last;
-      } catch (/*
-               * SQL
-               */Exception e) {
+      } catch (Exception e) {
          System.out.println(e.getMessage());
-         return 0;
+         return 1;
       }
    }
 
@@ -107,12 +105,12 @@ public class DBTableModel extends AbstractTableModel {
       }
    }
 
+    @Override
    public boolean isCellEditable(int row, int col) {
       return false;
    }
 
+    @Override
    public void setValueAt(Object value, int row, int col) {
-      //rowData[row][col] = value;
-      //fireTableCellUpdated(row, col);
    }
 }
