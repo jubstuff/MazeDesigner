@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
  *
  * @author Massimo
  * @author ADeLuca
+ * @author Giustino Borzacchiello - Raffaele Capasso
  * @version 2012
  */
 public class Labirinto extends DBFrame {

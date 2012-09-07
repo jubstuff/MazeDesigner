@@ -13,6 +13,7 @@ import javax.swing.*;
  *
  * @author Massimo
  * @author ADeLuca
+ * @author Giustino Borzacchiello - Raffaele Capasso
  * @version 2012
  */
 public class Login extends javax.swing.JDialog {

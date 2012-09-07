@@ -1,10 +1,14 @@
+/*
+ * CasellaButton.java
+ * 
+ */
 package it.unina.lbd.lbd2012;
 
 import javax.swing.JButton;
 
 /**
  *
- * @author justb
+ * @author Giustino Borzacchiello - Raffaele Capasso
  */
 public class CasellaButton extends JButton {
     private int col;

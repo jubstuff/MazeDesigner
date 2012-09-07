@@ -100,7 +100,7 @@ ALTER TABLE Labirinto ADD CONSTRAINT dimensioni_positive
 	CHECK(dimX > 0 AND dimY > 0);
 	
 ALTER TABLE Casella ADD CONSTRAINT tipo CHECK (
-	tipo IN ('V', 'D', 'S', 'P','M')
+	tipo IN ('V', 'S', 'M')
 );
 
 ALTER TABLE Casella ADD CONSTRAINT UQ_Casella 
