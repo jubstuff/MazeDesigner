@@ -1,3 +1,6 @@
+/*
+ * Griglia.java
+ */
 package it.unina.lbd.lbd2012;
 
 import java.awt.BorderLayout;
@@ -53,6 +56,13 @@ public class Griglia extends JPanel {
     private CasellaButton uscita;
     boolean isBozza;
 
+    /**
+     * Costruisce una nuova griglia di bottoni rappresentante un labirinto
+     *
+     * @param colonne
+     * @param righe
+     * @param codiceLabirinto
+     */
     public Griglia(int colonne, int righe, int codiceLabirinto) {
         this.codiceLabirinto = codiceLabirinto;
         isBozza = isBozza();
@@ -78,61 +88,6 @@ public class Griglia extends JPanel {
         add(panel);
     }
 
-    private void uscitaButtonAction(CasellaButton btn) {
-        uscita = btn;
-        btn.setBackground(Color.RED);
-        btn.setTipo(CASELLA);
-        btn.setIsUscita(true);
-    }
-
-    private void specialeButtonAction(CasellaButton btn) {
-        disableEntrataOrUscita(btn);
-
-
-        btn.setBackground(Color.YELLOW);
-        btn.setTipo(SPECIALE);
-        String result;
-        String messaggio = "Aggiungi una bonus/malus alla casella: (Es. -100, 45)";
-        int punti = 0;
-        try {
-            result = JOptionPane.showInputDialog(messaggio);
-            if (result != null) {
-                punti = Integer.decode(result);
-            } else {
-                casellaButtonAction(btn);
-            }
-
-        } catch (NumberFormatException e) {
-            String message = "Il bonus/malus deve essere un numero intero"
-                    + "\n Bonus/malus impostato a 0.";
-            JOptionPane.showMessageDialog(this, message, "Errore!",
-                    JOptionPane.ERROR_MESSAGE);
-            punti = 0;
-        }
-        btn.setPunteggio(punti);
-    }
-
-    private void casellaButtonAction(CasellaButton btn) {
-        System.out.println("Creata casella vuota");
-        disableEntrataOrUscita(btn);
-        btn.setBackground(Color.WHITE);
-        btn.setTipo(CASELLA);
-    }
-
-    private void muroButtonAction(CasellaButton btn) {
-        System.out.println("Creata casella muro");
-        disableEntrataOrUscita(btn);
-        btn.setBackground(Color.BLACK);
-        btn.setTipo(MURO);
-    }
-
-    private void entrataButtonAction(CasellaButton btn) {
-        entrata = btn;
-        btn.setBackground(Color.GREEN);
-        btn.setTipo(CASELLA);
-        btn.setIsEntrata(true);
-    }
-
     /**
      * Crea il pannello contenente la griglia del labirinto
      *
@@ -141,17 +96,14 @@ public class Griglia extends JPanel {
      * @return
      */
     private JPanel createGrid(int colonne, int righe) {
-        JPanel gpanel = new JPanel();
-        gpanel.setLayout(new GridLayout(righe, colonne));
-
         class GridButtonListener implements ActionListener {
 
             @Override
             public void actionPerformed(ActionEvent event) {
-                gridButtonAction(event);
+                leftClickButtonAction(event);
             }
 
-            private void gridButtonAction(ActionEvent event) {
+            private void leftClickButtonAction(ActionEvent event) {
                 CasellaButton source = (CasellaButton) event.getSource();
                 int col = source.getCol();
                 int row = source.getRow();
@@ -183,13 +135,136 @@ public class Griglia extends JPanel {
             }
         }
 
-
-
-        ActionListener listener = new GridButtonListener();
-        buildGrid(colonne, righe, listener, gpanel);
+        JPanel gpanel = new JPanel();
+        gpanel.setLayout(new GridLayout(righe, colonne));
+        ActionListener leftClicklistener = new GridButtonListener();
+        buildGrid(colonne, righe, leftClicklistener, gpanel);
         return gpanel;
     }
 
+    /**
+     * Imposta il tipo e lo sfondo di un bottone casella
+     *
+     * @param btn
+     */
+    private void casellaButtonAction(CasellaButton btn) {
+        System.out.println("Creata casella vuota");
+        disableEntrataOrUscita(btn);
+        btn.setBackground(Color.WHITE);
+        btn.setTipo(CASELLA);
+    }
+
+    /**
+     * Imposta il tipo e lo sfondo di un bottone muro
+     *
+     * @param btn
+     */
+    private void muroButtonAction(CasellaButton btn) {
+        System.out.println("Creata casella muro");
+        disableEntrataOrUscita(btn);
+        btn.setBackground(Color.BLACK);
+        btn.setTipo(MURO);
+    }
+
+    /**
+     * Imposta il tipo e lo sfondo di un bottone entrata
+     *
+     * @param btn
+     */
+    private void entrataButtonAction(CasellaButton btn) {
+        entrata = btn;
+        btn.setBackground(Color.GREEN);
+        btn.setTipo(CASELLA);
+        btn.setIsEntrata(true);
+    }
+
+    /**
+     * Imposta il tipo e lo sfondo di un bottone uscita
+     *
+     * @param btn
+     */
+    private void uscitaButtonAction(CasellaButton btn) {
+        uscita = btn;
+        btn.setBackground(Color.RED);
+        btn.setTipo(CASELLA);
+        btn.setIsUscita(true);
+    }
+
+    /**
+     * Imposta il tipo e lo sfondo di un bottone speciale
+     *
+     * @param btn
+     */
+    private void specialeButtonAction(CasellaButton btn) {
+        disableEntrataOrUscita(btn);
+
+        btn.setBackground(Color.YELLOW);
+        btn.setTipo(SPECIALE);
+        String result;
+        String messaggio = "Aggiungi una bonus/malus alla casella: (Es. -100, 45)";
+        int punti = 0;
+        try {
+            result = JOptionPane.showInputDialog(messaggio);
+            if (result != null) {
+                punti = Integer.decode(result);
+            } else {
+                casellaButtonAction(btn);
+            }
+
+        } catch (NumberFormatException e) {
+            String message = "Il bonus/malus deve essere un numero intero"
+                    + "\n Bonus/malus impostato a 0.";
+            JOptionPane.showMessageDialog(this, message, "Errore!",
+                    JOptionPane.ERROR_MESSAGE);
+            punti = 0;
+        }
+        btn.setPunteggio(punti);
+    }
+
+    /**
+     * Aggiunge una descrizione ad una casella della griglia
+     *
+     * @param evt
+     */
+    private void addDescription(MouseEvent evt) {
+        CasellaButton source = (CasellaButton) evt.getSource();
+        String descr = JOptionPane.showInputDialog("Aggiungi una descrizione alla casella:");
+        if (descr != null && descr.length() > 0) {
+            try {
+                Connection conn = Database.getDefaultConnection();
+                System.out.println("[" + source.getCol() + ":" + source.getRow() + "]: " + descr);
+                String updateQuery = "UPDATE Casella SET descrizione = ? WHERE codice = ?";
+                PreparedStatement stmt = conn.prepareStatement(updateQuery,
+                        ResultSet.TYPE_SCROLL_INSENSITIVE,
+                        ResultSet.CONCUR_READ_ONLY);
+                stmt.setString(1, descr);
+                stmt.setInt(2, source.getCodice());
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+            }
+        }
+    }
+
+    /**
+     * Imposta a null i campi entrata e uscita se collegati con il bottone in
+     * input
+     *
+     * @param btn
+     */
+    private void disableEntrataOrUscita(CasellaButton btn) {
+        if (btn.isEntrata()) {
+            entrata = null;
+        }
+        if (btn.isUscita()) {
+            uscita = null;
+        }
+    }
+
+    /**
+     * Crea il pannello contenente i controlli
+     *
+     * @return Pannello con i bottoni radio dei controlli
+     */
     private JPanel createControlRadioButtons() {
         //creazione bottoni modalita'
         casellaButton = new JRadioButton("Casella");
@@ -213,7 +288,6 @@ public class Griglia extends JPanel {
                 System.out.println("Tipo: " + source.getClientProperty("tipo"));
 
                 modalita = (String) source.getClientProperty("tipo");
-                System.out.println("Modalità: " + modalita);
             }
         }
 
@@ -246,6 +320,14 @@ public class Griglia extends JPanel {
         return cpanel;
     }
 
+    /**
+     * Costruisce la griglia di bottoni che rappresenta il labirinto
+     *
+     * @param colonne numero di colonne della griglia
+     * @param righe numero di righe della griglia
+     * @param listener listener da associare al click di una casella
+     * @param gpanel pannello a cui aggiungere i bottoni
+     */
     private void buildGrid(int colonne, int righe, ActionListener listener, JPanel gpanel) {
         ResultSet rs;
         int posX;
@@ -302,38 +384,19 @@ public class Griglia extends JPanel {
                     uscitaButtonAction(grid[posY][posX]);
                 }
                 grid[posY][posX].addActionListener(listener);
-                
+
                 //Right click mouse listener per descrizione
                 grid[posY][posX].addMouseListener(new java.awt.event.MouseAdapter() {
                     @Override
                     public void mousePressed(java.awt.event.MouseEvent evt) {
                         if (SwingUtilities.isRightMouseButton(evt)) {
-                            rightClickAction(evt);
-                        }
-                    }
-
-                    private void rightClickAction(MouseEvent evt) {
-                        CasellaButton source = (CasellaButton) evt.getSource();
-                        String descr = JOptionPane.showInputDialog("Aggiungi una descrizione alla casella:");
-                        if (descr != null && descr.length() > 0) {
-                            try {
-                                Connection conn = Database.getDefaultConnection();
-                                System.out.println("[" + source.getCol() + ":" + source.getRow() + "]: " + descr);
-                                String updateQuery = "UPDATE Casella SET descrizione = ? WHERE codice = ?";
-                                PreparedStatement stmt = conn.prepareStatement(updateQuery,
-                                        ResultSet.TYPE_SCROLL_INSENSITIVE,
-                                        ResultSet.CONCUR_READ_ONLY);
-                                stmt.setString(1, descr);
-                                stmt.setInt(2, source.getCodice());
-                                stmt.executeUpdate();
-                            } catch (SQLException e) {
-                            }
+                            addDescription(evt);
                         }
                     }
                 });
 
                 gpanel.add(grid[posY][posX]);
-                System.out.println("Riga:"+posY + "; Colonna:" + posX + ":" + tipo);
+                System.out.println("Riga:" + posY + "; Colonna:" + posX + ":" + tipo);
             }
 
         } catch (SQLException e) {
@@ -341,6 +404,12 @@ public class Griglia extends JPanel {
         }
     }
 
+    /**
+     * Imposta il tipo di casella e il colore di sfondo
+     *
+     * @param btn
+     * @param tipo
+     */
     private void setTipoCasella(CasellaButton btn, String tipo) {
         btn.setTipo(tipo);
         if (tipo.equals(CASELLA)) {
@@ -353,7 +422,12 @@ public class Griglia extends JPanel {
         }
     }
 
-    public void deleteGrid() throws SQLException {
+    /**
+     * Elimina tutti i collegamenti esistenti e le caselle speciali
+     *
+     * @throws SQLException
+     */
+    public void resetGrid() throws SQLException {
         Connection conn = Database.getDefaultConnection();
 
         String deleteCollQuery = "DELETE FROM collegamento WHERE origine IN (SELECT origine FROM casella WHERE labirinto=?)";
@@ -371,6 +445,14 @@ public class Griglia extends JPanel {
         delSpecStmt.execute();
     }
 
+    /**
+     * Controlla se il labirinto è una bozza.
+     *
+     * Se un labirinto è una bozza, deve ancora essere creato e sarà composto da
+     * soli muri. Altrimenti si tratta di un aggiornamento.
+     *
+     * @return true se è una bozza, false altrimenti
+     */
     private boolean isBozza() {
         Object o;
 
@@ -381,10 +463,19 @@ public class Griglia extends JPanel {
         return isBozza;
     }
 
+    /**
+     * Salva la griglia rappresentante il labirinto nel database.
+     *
+     * Se si è in fase di aggiornamento, effettua un reset del labirinto e poi
+     * inserisce i nuovi valori (collegamenti, entrata, uscita, caselle
+     * speciali).
+     *
+     * @throws Exception
+     */
     public void saveGrid() throws Exception {
         if (entrata != null && uscita != null) {
             if (!isBozza) {
-                deleteGrid();
+                resetGrid();
             }
             Connection conn = Database.getDefaultConnection();
             try {
@@ -401,7 +492,7 @@ public class Griglia extends JPanel {
                         ResultSet.CONCUR_READ_ONLY);
 
                 String collQuery = "INSERT ALL ";
-                
+
                 for (int i = 0; i < grid.length; i++) {
                     for (int j = 0; j < grid[0].length; j++) {
                         //i scorre in altezza - righe
@@ -428,11 +519,11 @@ public class Griglia extends JPanel {
                                 collQuery += intoQuery + "VALUES(" + grid[i][j].getCodice() + "," + grid[i + 1][j].getCodice() + ") ";
                             }
                             if ((j > 0) && !((String) grid[i][j - 1].getTipo()).equals(MURO)) {
-                                System.out.println("Collego " + grid[i][j].getCol() + ":" + grid[i][j].getRow() + "->" + grid[i][j-1].getCol() + ":" + grid[i][j-1].getRow());
+                                System.out.println("Collego " + grid[i][j].getCol() + ":" + grid[i][j].getRow() + "->" + grid[i][j - 1].getCol() + ":" + grid[i][j - 1].getRow());
                                 collQuery += intoQuery + "VALUES(" + grid[i][j].getCodice() + "," + grid[i][j - 1].getCodice() + ") ";
                             }
                             if ((j < grid[0].length - 1) && !((String) grid[i][j + 1].getTipo()).equals(MURO)) {
-                                System.out.println("Collego " + grid[i][j].getCol() + ":" + grid[i][j].getRow() + "->" + grid[i][j+1].getCol() + ":" + grid[i][j+1].getRow());
+                                System.out.println("Collego " + grid[i][j].getCol() + ":" + grid[i][j].getRow() + "->" + grid[i][j + 1].getCol() + ":" + grid[i][j + 1].getRow());
                                 collQuery += intoQuery + "VALUES(" + grid[i][j].getCodice() + "," + grid[i][j + 1].getCodice() + ") ";
                             }
                         }
@@ -471,21 +562,19 @@ public class Griglia extends JPanel {
                 msg += "SQLState= " + e.getSQLState() + "\n";
 
                 System.out.println(msg);
-                conn.rollback();
-                throw new Exception(e.getMessage());
-            }
 
+                //se si sono verificati errori, non salvare nulla nel DB
+                conn.rollback();
+
+                if (e.getErrorCode() == 20001) {
+                    throw new Exception("Deve esistere un percorso tra entrata "
+                            + "e uscita!");
+                } else {
+                    throw new Exception(e.getMessage());
+                }
+            }
         } else {
             throw new Exception("Bisogna scegliere entrata e uscita");
-        }
-    }
-
-    private void disableEntrataOrUscita(CasellaButton btn) {
-        if (btn.isEntrata()) {
-            entrata = null;
-        }
-        if (btn.isUscita()) {
-            uscita = null;
         }
     }
 }

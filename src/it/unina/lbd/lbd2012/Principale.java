@@ -9,6 +9,7 @@ package it.unina.lbd.lbd2012;
  * Frame principale.
  *
  * @author Massimo
+ * @author Giustino Borzacchiello - Raffaele Capasso
  */
 public class Principale extends javax.swing.JFrame {
 

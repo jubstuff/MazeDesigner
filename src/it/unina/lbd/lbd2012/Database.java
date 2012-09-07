@@ -111,12 +111,4 @@ public class Database {
       }
       return ret;
    }
-   /*
-    * Carica il driver JDBC: necessario solo con vecchi driver static { try {
-    * Class.forName("oracle.jdbc.driver.OracleDriver"); } catch (Exception e) {
-    * System.out.println("Qualcosa ? andato storto");
-    * System.out.println(e.getMessage()); JOptionPane.showMessageDialog(null,
-    * "Driver del database non trovato", "Errore", JOptionPane.ERROR_MESSAGE); }
-    * }
-    */
 }
