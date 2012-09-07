@@ -38,6 +38,9 @@ CREATE TABLE Collegamento
 	origine       NUMBER(8) NOT NULL,
 	destinazione  NUMBER(8) NOT NULL
 );
+ALTER TABLE Collegamento ADD CONSTRAINT PK_Collegamento
+	PRIMARY KEY (codice);
+
 
 --Speciale
 CREATE TABLE Speciale
@@ -52,104 +55,11 @@ ALTER TABLE Speciale ADD CONSTRAINT PK_Speciale
 
 
 
--- Domanda
-CREATE TABLE Domanda
-(
-	id_domanda             NUMBER(8) NOT NULL,
-	testo                  VARCHAR2(100) NOT NULL,
-	modificatorePunteggio  NUMBER(8) DEFAULT 0 NOT NULL,
-	tipo 				CHAR(1)  DEFAULT 'D' NOT NULL
-);
-
-ALTER TABLE Domanda ADD CONSTRAINT PK_Domanda
-	PRIMARY KEY (id_domanda);
 	
-ALTER TABLE Collegamento ADD CONSTRAINT PK_Collegamento
-	PRIMARY KEY (codice);
 
--- Risposta
-CREATE TABLE Risposta
-(
-	id_risposta  NUMBER(8) NOT NULL,
-	risposta     VARCHAR2(50) NOT NULL,
-	domanda      NUMBER(8) NOT NULL
-);
-
-ALTER TABLE Risposta ADD CONSTRAINT PK_Risposta
-	PRIMARY KEY (id_risposta);
 	
--- Passaggio
-CREATE TABLE Passaggio
-(
-	id_passaggio           NUMBER(8) NOT NULL,
-	modificatorePunteggio  NUMBER(8) DEFAULT 0 NOT NULL,
-	tipo 				CHAR(1)  DEFAULT 'P' NOT NULL
-);
-
-ALTER TABLE Passaggio ADD CONSTRAINT PK_Passaggio
-	PRIMARY KEY (id_passaggio);	
-
--- 
--- PARTE DINAMICA
---
-
--- Mossa
-CREATE TABLE Mossa
-(
-	partita       NUMBER(8) NOT NULL,
-	collegamento  NUMBER(8) NOT NULL,
-	ordine        NUMBER(8) NOT NULL
-);
-
-ALTER TABLE Mossa ADD CONSTRAINT PK_Mossa
-	PRIMARY KEY (partita, ordine);
-
-ALTER TABLE Mossa ADD CONSTRAINT FK_Mossa_Collegamento
-	FOREIGN KEY (collegamento) REFERENCES Collegamento (codice);
 
 
--- Partita
-CREATE TABLE Partita
-(
-	id_partita    NUMBER(8) NOT NULL,
-	giocatore     VARCHAR2(50) NOT NULL,
-	punteggio     NUMBER(8) DEFAULT 0 NOT NULL,
-	labirinto     NUMBER(8) NOT NULL,
-	is_terminata  CHAR(1) DEFAULT 'T' NOT NULL
-);
-
-ALTER TABLE Partita ADD CONSTRAINT PK_Partita
-	PRIMARY KEY (id_partita);
-	
-ALTER TABLE Mossa ADD CONSTRAINT FK_Mossa_Partita
-	FOREIGN KEY (partita) REFERENCES Partita (id_partita);
-
-
-ALTER TABLE Partita ADD CONSTRAINT FK_Partita_Labirinto
-	FOREIGN KEY (labirinto) REFERENCES Labirinto (codice)
-	ON DELETE CASCADE;
-
-ALTER TABLE Partita
-	ADD CONSTRAINT UQ_Partita_giocator UNIQUE(giocatore);
-	
--- RispostaData
-CREATE TABLE RispostaData
-(
-	partita   NUMBER(8) NOT NULL,
-	ordine    NUMBER(8) NOT NULL,
-	risposta  NUMBER(8) NOT NULL
-)
-;
-ALTER TABLE RispostaData ADD CONSTRAINT PK_RispostaData
-	PRIMARY KEY (partita, ordine)
-;
-
-ALTER TABLE RispostaData ADD CONSTRAINT FK_RispostaData_Mossa
-	FOREIGN KEY (partita, ordine) REFERENCES Mossa (partita, ordine);
-
-ALTER TABLE RispostaData ADD CONSTRAINT FK_RispostaData_Risposta
-	FOREIGN KEY (risposta) REFERENCES Risposta (id_risposta);
-/
 
 
 Create table temp
@@ -177,10 +87,6 @@ ALTER TABLE Collegamento ADD CONSTRAINT FK_Collegamento_Casella
 ALTER TABLE Collegamento ADD CONSTRAINT FK_Collegamento_Casella2
 	FOREIGN KEY (destinazione) REFERENCES Casella (codice)
 	ON DELETE CASCADE;
-	
-ALTER TABLE Risposta ADD CONSTRAINT FK_Risposta_Domanda
-	FOREIGN KEY (domanda) REFERENCES Domanda (id_domanda);
-
 
   -- Trigger & Vincoli
 
@@ -190,10 +96,8 @@ ALTER TABLE Casella ADD CONSTRAINT posizione_unica_labirinto
 ALTER TABLE Labirinto ADD CONSTRAINT entrata_uscita
 	CHECK(entrata <> uscita);
 
-
 ALTER TABLE Labirinto ADD CONSTRAINT dimensioni_positive 
 	CHECK(dimX > 0 AND dimY > 0);
-
 	
 ALTER TABLE Casella ADD CONSTRAINT tipo CHECK (
 	tipo IN ('V', 'D', 'S', 'P','M')
@@ -201,8 +105,8 @@ ALTER TABLE Casella ADD CONSTRAINT tipo CHECK (
 
 ALTER TABLE Casella ADD CONSTRAINT UQ_Casella 
 	UNIQUE(codice, tipo);
-
 /
+
 CREATE OR REPLACE TRIGGER esiste_percorso
 AFTER UPDATE OF is_bozza ON Labirinto
 For each row
@@ -238,11 +142,7 @@ BEGIN
 	END IF;
 END;
 /
-ALTER TABLE Partita
-	ADD CONSTRAINT UQ_Partita_partita_labirinto
-		UNIQUE(id_partita, labirinto)
-;
-/
+
 -- Trigger auto_increment
 create sequence codice_labirinto_sequence
 increment by 1 start with 1
@@ -293,50 +193,7 @@ begin
 end;
 
 /
-CREATE OR REPLACE TRIGGER ai_mossa_speciale
-AFTER INSERT ON Mossa
-FOR EACH ROW
-DECLARE
-  tempTipoDest casella.tipo%TYPE;
-  tempDest collegamento.destinazione%TYPE;
-  collPassaggio collegamento.codice%TYPE;
-  v_modificatore speciale.modificatorepunteggio%TYPE;
-BEGIN
-	SELECT CA.tipo, CL.destinazione
-	INTO tempTipoDest, tempDest
-	FROM Collegamento CL JOIN casella CA
-	ON CL.destinazione = CA.codice
-	WHERE CL.codice= :NEW.Collegamento;
-	IF tempTipoDest = 'S' THEN
-		SELECT modificatorePunteggio
-		INTO v_modificatore
-		FROM Speciale
-		WHERE id_speciale = tempDest;
 
-		UPDATE Partita set punteggio = punteggio + v_modificatore
-			WHERE id_partita = :NEW.Partita;
-	END IF;
-END;
-/
-CREATE OR REPLACE TRIGGER bi_ordine_mosse
-AFTER INSERT ON Mossa
-FOR EACH ROW
-DECLARE
-  max_ordine mossa.ordine%TYPE;
-BEGIN
-	SELECT MAX(ordine)
-	INTO max_ordine
-	FROM Mossa
-	WHERE partita = :NEW.partita;
-  IF max_ordine IS NULL THEN
-		INSERT INTO Mossa(ordine,partita,collegamento) VALUES
-		(1, :NEW.partita, :NEW.collegamento);
-	ELSE
-		INSERT INTO Mossa(ordine,partita,collegamento) VALUES
-		(max_ordine + 1, :NEW.partita, :NEW.collegamento);
-	END IF;
-END;
-/
 CREATE OR REPLACE TRIGGER bi_speciale
 BEFORE INSERT ON Speciale
 FOR EACH ROW
@@ -351,38 +208,14 @@ BEGIN
 	UPDATE Casella SET tipo = 'V' WHERE codice = :OLD.id_speciale;
 END;
 /
-CREATE OR REPLACE TRIGGER ai_mosse
-AFTER INSERT ON Mossa
-FOR EACH ROW
-DECLARE
-  tempTipoDest casella.tipo%TYPE;
-  tempDest Collegamento.destinazione%TYPE;
-  collPassaggio Collegamento.codice%TYPE;
-BEGIN
-	SELECT CA.tipo, CL.destinazione
-	INTO tempTipoDest, tempDest
-	FROM Collegamento CL JOIN Casella CA
-  ON CL.codice = CA.codice
-	WHERE CL.codice = :NEW.Collegamento;
-  
-  IF tempTipoDest = 'P' THEN
-		SELECT codice
-		INTO collPassaggio
-		FROM Collegamento
-		WHERE origine = tempDest;
 
-		INSERT INTO Mossa VALUES (:NEW.partita, collPassaggio,:NEW.ordine + 1);
-	END IF;
- 
-END;
-/
 Alter table collegamento add constraint UQ_orig_dest
 unique(origine,destinazione)
 /
 
 
 CREATE OR REPLACE PROCEDURE init_caselle_labirinto (cod_lab in number, dimx_lab in number, dimy_lab in number)
-AS
+IS
 BEGIN
     FOR i IN 0 .. dimy_lab - 1
     LOOP
