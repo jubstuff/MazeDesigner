@@ -15,6 +15,7 @@ import javax.swing.table.*;
  * condividerlo con il DBFrame.
  *
  * @author Massimo
+ * @author Giustino Borzacchiello - Raffaele Capasso
  */
 public class DBTableModel extends AbstractTableModel {
 
@@ -63,14 +64,14 @@ public class DBTableModel extends AbstractTableModel {
       }
       try {
          int currentPosition, last;
-         currentPosition = rs.getRow() <= 0 ? rs.getRow() : 1;
+         currentPosition = rs.getRow() > 0 ? rs.getRow() : 1;
          rs.last();
          last = rs.getRow();
          rs.absolute(currentPosition);
          return last;
       } catch (Exception e) {
          System.out.println(e.getMessage());
-         return 1;
+         return 0;
       }
    }
 
@@ -80,9 +81,7 @@ public class DBTableModel extends AbstractTableModel {
       }
       try {
          return rs.getMetaData().getColumnCount();
-      } catch (/*
-               * SQL
-               */Exception e) {
+      } catch (Exception e) {
          System.out.println(e.getMessage());
          return 0;
       }

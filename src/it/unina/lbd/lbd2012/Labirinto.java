@@ -202,7 +202,7 @@ public class Labirinto extends DBFrame {
             setCursor(Cursor.getDefaultCursor());
             pulisci();
             eseguiQuery();
-
+            setModalita(APPEND_QUERY);
         }
     }//GEN-LAST:event_bEditLabirintoActionPerformed
 
@@ -328,14 +328,13 @@ public class Labirinto extends DBFrame {
 
             validaLabirinto(nome, larghezza, altezza);
 
-            insertQuery = "insert into " + Database.schema + ".labirinto (codice,nome,"
-                    + "dimx, dimy) values(?,?,?,?)";
+            insertQuery = "insert into " + Database.schema + ".labirinto (nome,"
+                    + "dimx, dimy) values(?,?,?)";
             st = c.prepareStatement(insertQuery);
 
-            st.setInt(1, Integer.decode(getTCodice().getText()));
-            st.setString(2, tNome.getText());
-            st.setInt(3, larghezza);
-            st.setInt(4, altezza);
+            st.setString(1, tNome.getText());
+            st.setInt(2, larghezza);
+            st.setInt(3, altezza);
 
         } catch (NumberFormatException e) {
             String message = "Altezza e larghezza devono essere numeri interi";

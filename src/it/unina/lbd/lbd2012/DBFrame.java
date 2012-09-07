@@ -56,7 +56,6 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
      * Posizione del record corrente nel resultSet.*
      */
     private int pos = 1;
-    //private int vecchioCodice=-1;
     /**
      * modello della tabella di navigazione (quella in basso).
      */
@@ -136,9 +135,6 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
      */
     void setNomeTabella(String nomeTabella) {
         this.nomeTabella = nomeTabella;
-        //imposta una query senza risultati
-        // query="select * from "+Database.schema+"."+nomeTabella
-        //    +" where codice<>codice";
     }
 
     /**
@@ -326,7 +322,6 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
         bAnnulla = new javax.swing.JButton();
         bElimina = new javax.swing.JButton();
         bOk = new javax.swing.JButton();
-        bNuovoCodice = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -381,6 +376,8 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
 
         jLabel1.setText("Codice");
 
+        tCodice.setEditable(false);
+
         bApri.setText("Apri");
         bApri.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -409,19 +406,12 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
             }
         });
 
-        bNuovoCodice.setText("123...");
-        bNuovoCodice.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bNuovoCodiceActionPerformed(evt);
-            }
-        });
-
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(19, 19, 19)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
                         .add(bPrimo)
@@ -440,9 +430,7 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
                     .add(layout.createSequentialGroup()
                         .add(jLabel1)
                         .add(55, 55, 55)
-                        .add(tCodice, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 143, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(20, 20, 20)
-                        .add(bNuovoCodice)))
+                        .add(tCodice, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 143, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
@@ -478,20 +466,15 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel1)
                     .add(tCodice, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(bNuovoCodice, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(bOk, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(bAnnulla, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(372, Short.MAX_VALUE))
         );
 
-        layout.linkSize(new java.awt.Component[] {bAnnulla, bApri, bCerca, bElimina, bNuovo, bNuovoCodice, bOk, bSalva, bUltimo}, org.jdesktop.layout.GroupLayout.VERTICAL);
+        layout.linkSize(new java.awt.Component[] {bAnnulla, bApri, bCerca, bElimina, bNuovo, bOk, bSalva, bUltimo}, org.jdesktop.layout.GroupLayout.VERTICAL);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void bNuovoCodiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bNuovoCodiceActionPerformed
-        impostaCodice();
-    }//GEN-LAST:event_bNuovoCodiceActionPerformed
     protected void impostaCodice() {
         String codice;
         System.out.println("select max(codice)+1 from " + Database.schema + "."
@@ -507,7 +490,7 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
      *
      */
     protected void premutoOK() {
-        //non pu? essere abstract, per alcuni frame non ? necessario
+        //non puo' essere abstract, per alcuni frame non e' necessario
     }
 
     private void bOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bOkActionPerformed
@@ -545,8 +528,8 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
 
     private void selezioneTabellaCambiata() {
         try {
-            rs.absolute(
-                    tabFrameTable.getSelectionModel().getMinSelectionIndex() + 1);
+            int row = tabFrameTable.getSelectionModel().getMinSelectionIndex() + 1;
+            rs.absolute(row);
             mostraDati();
 
         } catch (SQLException e) {
@@ -558,7 +541,6 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
     private void bApriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bApriActionPerformed
 
         setModalita(UPDATE);
-        // vecchioCodice=Integer.getInteger(tCodice.getText());
     }//GEN-LAST:event_bApriActionPerformed
 
     /**
@@ -570,7 +552,6 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
         try {
             tCodice.setText(rs.getString("codice"));
             pos = rs.getRow();
-            //tabFrameTable.getSelectionModel().setSelectionInterval(pos-1,pos-1);
             tabFrameTable.setRowSelectionInterval(pos - 1, pos - 1);
         } catch (SQLException e) {
             mostraErrori(e);
@@ -626,8 +607,6 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
         return null;
     }
     private void bCercaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCercaActionPerformed
-        //creaSelectQuery();
-        //System.out.println(query);
         eseguiQuery();
     }//GEN-LAST:event_bCercaActionPerformed
 
@@ -651,9 +630,6 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
             mostraErrori(e, query, CONTESTO_ESEGUI_QUERY);
         } catch (java.lang.NullPointerException e) {
             System.out.println(e.toString());
-            //non devo mostrare nessun errore
-            //si dovrebbe verificare solo se st=null
-            //quando la connessione ? caduta
         }
     }
 
@@ -703,11 +679,7 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
         Connection c = null;
         try {
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            if (this.tCodice.getText().trim().length() == 0) {
-                impostaCodice();
-            } else {
-                System.out.println("il codice non risulta vuoto");
-            }
+            
             try {
                 c = Database.getDefaultConnection();
                 if (modalita == APPEND_QUERY) {
@@ -717,7 +689,7 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
                 }
                 ret = false;
                 c.setAutoCommit(false);
-                ret = st.executeUpdate() >= 0;//eseguiComando(query,c);
+                ret = st.executeUpdate() >= 0;
                 if (ret) {
                     ret = eseguiSalva(c);
                 }
@@ -767,7 +739,6 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
     private boolean eseguiComando(String cmd) {
         return eseguiComando(cmd, null);
     }
-    //modificato
 
     private boolean eseguiComando(String cmd, Connection c) {
         Statement s;
@@ -800,7 +771,6 @@ abstract public class DBFrame extends javax.swing.JFrame implements NeedLookup {
     private javax.swing.JButton bCerca;
     private javax.swing.JButton bElimina;
     private javax.swing.JButton bNuovo;
-    private javax.swing.JButton bNuovoCodice;
     private javax.swing.JButton bOk;
     private javax.swing.JButton bPrecedente;
     private javax.swing.JButton bPrimo;

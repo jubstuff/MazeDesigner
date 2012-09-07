@@ -17,7 +17,7 @@ import oracle.jdbc.pool.OracleDataSource;
  */
 public class Database {
 
-   static public String host = "192.168.1.69"; //TODO mettere localhost
+   static public String host = "192.168.1.73"; //TODO mettere localhost
    static public String servizio = "xe";
    static public int porta = 1521;
    static public String user = "labirinto";

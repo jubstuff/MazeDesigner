@@ -27,7 +27,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="bPrimo" min="-2" max="-2" attributes="0"/>
@@ -48,8 +48,6 @@
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
                       <Component id="tCodice" min="-2" pref="143" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-                      <Component id="bNuovoCodice" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -88,7 +86,6 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="tCodice" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="bNuovoCodice" linkSize="1" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                   <Component id="bOk" linkSize="1" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                   <Component id="bAnnulla" linkSize="1" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
               </Group>
@@ -160,6 +157,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tCodice">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="bApri">
       <Properties>
@@ -191,14 +191,6 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bOkActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="bNuovoCodice">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="123..."/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bNuovoCodiceActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
